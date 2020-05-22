@@ -147,6 +147,11 @@ namespace TShockAPI
 		/// </summary>
 		public static event Action Initialized;
 
+		/// <summary>
+        /// Called before TShock handles it's own command initializer therefore making sure plugins get registered properly.
+        /// </summary>
+		public static event Action CommandRegister;
+
 		/// <summary>Version - The version required by the TerrariaAPI to be passed back for checking & loading the plugin.</summary>
 		/// <value>value - The version number specified in the Assembly, based on the VersionNum variable set in this class.</value>
 		public override Version Version
@@ -362,6 +367,9 @@ namespace TShockAPI
 				Hooks.PlayerHooks.PlayerPostLogin += OnPlayerLogin;
 				Hooks.AccountHooks.AccountDelete += OnAccountDelete;
 				Hooks.AccountHooks.AccountCreate += OnAccountCreate;
+
+				if (CommandRegister != null)
+					CommandRegister();
 
 				GetDataHandlers.InitGetDataHandler();
 				Commands.InitCommands();
